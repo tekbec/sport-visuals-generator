@@ -1,7 +1,7 @@
 from cairosvg import svg2png
 import PIL, PIL.Image
 import os
-from utils import init_tmp_dir
+from .utils import init_tmp_dir
 import requests
 
 def paste_svg(base: PIL.Image.Image, svg: str, pos, width: int):
@@ -13,7 +13,7 @@ def paste_svg(base: PIL.Image.Image, svg: str, pos, width: int):
     else:
         svg_filepath = os.path.join(tmp_dir, 'tmp.svg')
         if os.path.isfile(svg_filepath): os.unlink(svg_filepath)
-        response = requests.get(svg)
+        response = requests.get(svg, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
         response.raise_for_status()
         with open(svg_filepath, 'wb') as file:
             file.write(response.content)

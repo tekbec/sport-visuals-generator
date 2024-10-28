@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from typing import Tuple
 from PIL import Image, ImageDraw, ImageFont
-from svg import paste_svg
+from .svg import paste_svg
+import os
+
+root_path = os.path.dirname(os.path.realpath(__file__))
 
 @dataclass
 class Team:
@@ -55,6 +58,7 @@ def generate(
     t2_abbr_pos = (t2_rect_pos[0][0]+(t2_rect_pos[1][0]-t2_rect_pos[0][0])/2,t2_rect_pos[0][1]+0.93*(t2_rect_pos[1][1]-t2_rect_pos[0][1]))
 
     # League constants
+
     l_pos = (w/2, t2_rect_pos[1][1])
     l_width = l.logo_scale*(t1_rect_width/4)
 
@@ -129,11 +133,10 @@ def generate(
     dr.rectangle(t1_rect_pos, fill=t1.background)
     dr.rectangle(t2_rect_pos, fill=t2.background)
 
-
     # Teams header
 
-    city_font = ImageFont.truetype('fonts/city.otf', t1_rect_width/12.8)
-    name_font = ImageFont.truetype('fonts/name.otf', t1_rect_width/9.15)
+    city_font = ImageFont.truetype(os.path.join(root_path, 'fonts', 'city.otf'), t1_rect_width/12.8)
+    name_font = ImageFont.truetype(os.path.join(root_path, 'fonts', 'name.otf'), t1_rect_width/9.15)
 
     dr.text(t1_city_pos, t1.city.upper(), fill=t1.city_color, font=city_font, anchor='mm', align='center')
     dr.text(t1_name_pos, t1.name.upper(), fill=t1.name_color, font=name_font, anchor='mm', align='center')
@@ -143,7 +146,7 @@ def generate(
 
     # Teams abbreviation
 
-    abbr_font = ImageFont.truetype('fonts/name.otf', t1_rect_width/1.68)
+    abbr_font = ImageFont.truetype(os.path.join(root_path, 'fonts', 'name.otf'), t1_rect_width/1.68)
 
     abbr_1_im = Image.new('RGBA', im.size, (255,255,255,0))
     abbr_1_dr = ImageDraw.Draw(abbr_1_im)
@@ -172,7 +175,7 @@ def generate(
     vs_rect_width  = t1_rect_width/8
     vs_rect_height = t1_rect_height/20
     dr.rectangle((w/2-vs_rect_width/2, h/2-vs_rect_height/2, w/2+vs_rect_width/2, h/2+vs_rect_height/2), vs_background)
-    vs_font = ImageFont.truetype('fonts/vs.ttf', t1_rect_width/14.5454)
+    vs_font = ImageFont.truetype(os.path.join(root_path, 'fonts', 'vs.ttf'), t1_rect_width/14.5454)
     dr.text((w/2, 0.498*h), 'VS.', fill=vs_color, font=vs_font, anchor='mm', align='center')
 
     im.save(o)
